@@ -11,12 +11,23 @@ if (!databaseUri) {
   console.log('DATABASE_URI not specified, falling back to localhost.');
 }
 
+var pushConfig = {};
+if (process.env.GCM_SENDER_ID && process.env.GCM_API_KEY) {
+   pushConfig['android'] = {
+   senderId: process.env.GCM_SENDER_ID || '',
+   apiKey: process.env.GCM_API_KEY || ''};
+}
 var api = new ParseServer({
+          // other variables here
+              push: pushConfig,
+          });
+var api = new ParseServer({
+  push: pushConfig,
   databaseURI: databaseUri || 'mongodb://localhost:27017/dev',
   cloud: process.env.CLOUD_CODE_MAIN || __dirname + '/cloud/main.js',
-  appId: process.env.APP_ID || 'myAppId',
-  masterKey: process.env.MASTER_KEY || '', //Add your master key here. Keep it secret!
-  serverURL: process.env.SERVER_URL || 'http://localhost:1337/parse',  // Don't forget to change to https if needed
+  appId: process.env.APP_ID || 'teamJamie',
+  masterKey: process.env.MASTER_KEY || 'teamJamieRocks', //Add your master key here. Keep it secret!
+  serverURL: process.env.SERVER_URL || 'http://fbu2017parse.herokuapp.com/parse',  // Don't forget to change to https if needed
   liveQuery: {
     classNames: ["Posts", "Comments"] // List of classes to support for query subscriptions
   }
